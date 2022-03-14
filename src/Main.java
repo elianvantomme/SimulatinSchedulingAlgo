@@ -1,16 +1,36 @@
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main {
+
     public static void main(String[] args) {
-    }
+
+
+        XMLparser parser = new XMLparser("voorbeeldPPT.xml");
+        ArrayList<Process> processList = parser.readProcesses();
+
+        FirstComeFirstServe fcfs = new FirstComeFirstServe();
+        fcfs.process(processList);
+        processList.clear();
+
+        processList = parser.readProcesses();
+        ShortestProcessNext spn = new ShortestProcessNext();
+        spn.process(processList);
+        processList.clear();
+
+        processList = parser.readProcesses();
+        RoundRobin rr = new RoundRobin();
+        rr.process(processList);
+        processList.clear();
+
+
+        //processList.sort((p1, p2) -> p1.getArrivaltime() - p2.getArrivaltime());
+
+
+
+//		for(int i=0; i<5; i++) {
+//			System.out.println(processList.get(i));
+//		}
+
+            }
+
 }

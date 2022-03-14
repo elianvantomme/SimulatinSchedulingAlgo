@@ -9,19 +9,28 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.Objects;
-import java.util.Queue;
+import java.util.ArrayList;
 
 public class XMLparser {
-    public void readProcesses() {
-        Queue<Process> processes = new LinkedList<>();
+
+    private ArrayList<Process> processLijst;
+    private String file;
+
+
+
+    public XMLparser(String file) {
+        this.processLijst = new ArrayList<>();
+        this.file = file;
+    }
+
+
+    public ArrayList<Process> readProcesses() {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
 
-            Document document = builder.parse(new File("processen50000.xml"));
+            Document document = builder.parse(new File(file));
 
             document.getDocumentElement().normalize();
 
@@ -47,7 +56,7 @@ public class XMLparser {
                             }
                         }
                     }
-                    System.out.println("\n");
+                    processLijst.add(process);
                 }
             }
         } catch (ParserConfigurationException e) {
@@ -57,6 +66,9 @@ public class XMLparser {
         } catch (SAXException e) {
             e.printStackTrace();
         }
+
+        return processLijst;
+
     }
 }
 
