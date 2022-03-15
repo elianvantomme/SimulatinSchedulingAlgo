@@ -5,7 +5,7 @@ public class Main {
     public static void main(String[] args) {
 
 
-        XMLparser parser = new XMLparser("voorbeeldPPT.xml");
+        XMLparser parser = new XMLparser("processen50000.xml");
         ArrayList<Process> processList = parser.readProcesses();
 
         FirstComeFirstServe fcfs = new FirstComeFirstServe();
@@ -13,7 +13,7 @@ public class Main {
         processList.clear();
 
         processList = parser.readProcesses();
-        ShortestProcessNext spn = new ShortestProcessNext();
+        ShortestJobFirst spn = new ShortestJobFirst();
         spn.process(processList);
         processList.clear();
 

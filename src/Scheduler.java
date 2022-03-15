@@ -34,4 +34,14 @@ public class Scheduler {
         }
         return total / (double) processList.size();
     }
+
+    static void calculateWaitingTime(ArrayList<Process> processList){
+        for(Process p : processList) {
+            int waitTime = p.getEndTime() - p.getArrivalTime() - p.getServiceTime();
+            p.setWaitingTime(waitTime);
+            p.setTurnaroundTime(calculateTAT(p));
+            p.setNormalisedTurnaroundTime(calculateNormalisedTAT(p));;
+            //System.out.println(p);
+        }
+    }
 }
