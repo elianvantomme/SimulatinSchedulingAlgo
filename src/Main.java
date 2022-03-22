@@ -12,18 +12,19 @@ public class Main {
     static void graphNormalisedTAT(String name){
         processList.sort((p1, p2) -> p1.getServiceTime() - p2.getServiceTime());
         XYSeries series = new XYSeries(name);
-        double total=0;
+        double totalJIFFY=0;
         int teller=0;
         for(int j=0; j<100; j++){
             while (teller < 50000){
-                total += processList.get(teller).getNormalisedTurnaroundTime();
+                totalJIFFY += processList.get(teller).getNormalisedTurnaroundTime();
                 teller++;
                 if(teller % 500 == 0){
                     break;
                 }
             }
-            series.add(j,total/500);
-            total=0;
+            double gemiddeldeAantalJIFFY = totalJIFFY / 500;
+            series.add(j,gemiddeldeAantalJIFFY * Math.pow(10, -2)); // 1 jiffy = 10ms
+            totalJIFFY=0;
         }
         datasetNormalisedTAT.addSeries(series);
     }
@@ -31,18 +32,19 @@ public class Main {
     static void graphWaitTime(String name){
         processList.sort((p1, p2) -> p1.getServiceTime() - p2.getServiceTime());
         XYSeries series = new XYSeries(name);
-        double total=0;
+        double totalJIFFY=0;
         int teller=0;
         for(int j=0; j<100; j++){
             while (teller < 50000){
-                total += processList.get(teller).getWaitingTime();
+                totalJIFFY += processList.get(teller).getWaitingTime();
                 teller++;
                 if(teller % 500 == 0){
                     break;
                 }
             }
-            series.add(j,total/500);
-            total=0;
+            double gemiddeldeAantalJIFFY = totalJIFFY / 500;
+            series.add(j,gemiddeldeAantalJIFFY * Math.pow(10, -2)); // 1 jiffy = 10ms
+            totalJIFFY=0;
         }
         datasetWaitTime.addSeries(series);
     }

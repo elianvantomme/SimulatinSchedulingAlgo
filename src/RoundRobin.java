@@ -14,7 +14,7 @@ public class RoundRobin extends Scheduler{
 
         Queue<Process> waitingList = new LinkedList<>();
         int time=0;
-        int timeSlot = 4;
+        int timeSlot = 1;
         Process current;
         int i=1;
         int remainingExecutionTime = 0;
