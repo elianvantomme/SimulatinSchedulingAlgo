@@ -1,3 +1,10 @@
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -13,7 +20,7 @@ public class RoundRobin extends Scheduler{
         int remainingExecutionTime = 0;
         int finishedProcesses=0;
 
-        //add first process (arrivaltime=0 to the queue)
+        //add first process
         waitingList.add(processList.get(0));
 
         while(finishedProcesses != processList.size()) {
@@ -64,11 +71,12 @@ public class RoundRobin extends Scheduler{
         //calculate waiting times
         calculateWaitingTime(processList);
 
-
         System.out.println("\n Round Robin");
         System.out.println("\t mean TAT: " + calculateMeanTAT(processList));
         System.out.println("\t mean normalised TAT: " + calculateMeanNormalisedTAT(processList));
         System.out.println("\t mean waiting time: " + calculateMeanWaitingTime(processList));
+
+
 
     }
 }

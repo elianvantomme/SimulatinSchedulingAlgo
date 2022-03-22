@@ -2,7 +2,6 @@ import java.util.ArrayList;
 
 public class Scheduler {
 
-
     static int calculateTAT(Process p) {
         return p.getServiceTime() + p.getWaitingTime();
     }
