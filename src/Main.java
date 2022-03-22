@@ -73,6 +73,13 @@ public class Main {
         graphWaitTime("RR");
         processList.clear();
 
+        processList = parser.readProcesses();
+        HighestResponseRatioNext hrrn = new HighestResponseRatioNext();
+        hrrn.process(processList);
+        graphNormalisedTAT("HRRN");
+        graphWaitTime("HRRN");
+        processList.clear();
+
         //normalisedTAT plot
         JFreeChart chartNormalisedTAT = ChartFactory.createXYLineChart(
                 "normalised TAT in function of service time",

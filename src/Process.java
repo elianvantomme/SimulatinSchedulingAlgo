@@ -126,4 +126,15 @@ public class Process {
     }
 
 
+    public void calculateTAT() {
+        turnaroundTime = serviceTime + waitingTime;
+    }
+
+    public void calculateNormalisedTAT() {
+        normalisedTurnaroundTime = (double) turnaroundTime / serviceTime;
+    }
+
+    public void calculateCurrentWaitingTime(int currentTime) {
+        waitingTime = currentTime - arrivalTime;
+    }
 }
