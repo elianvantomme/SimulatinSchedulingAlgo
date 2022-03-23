@@ -65,7 +65,9 @@ public class Main {
 
         processList = parser.readProcesses();
         ShortestJobFirst spn = new ShortestJobFirst();
-        spn.process(processList);
+        processList = spn.process(processList);
+        graphNormalisedTAT("SJF");
+        graphWaitTime("SJF");
         processList.clear();
 
         processList = parser.readProcesses();
@@ -80,6 +82,13 @@ public class Main {
         hrrn.process(processList);
         graphNormalisedTAT("HRRN");
         graphWaitTime("HRRN");
+        processList.clear();
+
+        processList = parser.readProcesses();
+        ShortestRemainingTime srt = new ShortestRemainingTime();
+        processList = srt.process(processList);
+        graphNormalisedTAT("SRT");
+        graphWaitTime("SRT");
         processList.clear();
 
         //normalisedTAT plot

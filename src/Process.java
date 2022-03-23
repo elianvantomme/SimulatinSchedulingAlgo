@@ -8,6 +8,7 @@ public class Process {
     private int turnaroundTime;
     private double normalisedTurnaroundTime;
     private int executionTime;
+    private int remainingTime;
 
     public Process(){
         pId = 0;
@@ -18,6 +19,7 @@ public class Process {
         turnaroundTime = 0;
         normalisedTurnaroundTime = 0.0;
         waitingTime=0;
+        remainingTime = 0;
     }
 
     public Process(int pId, int arrivalTime, int serviceTime) {
@@ -30,6 +32,7 @@ public class Process {
         this.endTime = 0;
         this.turnaroundTime = 0;
         this.normalisedTurnaroundTime = 0.0;
+        this.remainingTime = serviceTime;
     }
 
 
@@ -102,13 +105,19 @@ public class Process {
         this.serviceTime = serviceTime;
     }
 
+    public int getRemainingTime() {
+        return remainingTime;
+    }
 
+    public void setRemainingTime(int remainingTime) {
+        this.remainingTime = remainingTime;
+    }
 
     @Override
     public String toString() {
         return "Process [pId=" + pId + ", arrivaltime=" + arrivalTime + ", serviceTime=" + serviceTime + ", waitingTime=" + waitingTime + ", startTime="
                 + startTime + ", endTime=" + endTime + ", turnaroundTime=" + turnaroundTime
-                + ", normalisedTurnaroundTime=" + normalisedTurnaroundTime  + "]";
+                + ", normalisedTurnaroundTime=" + normalisedTurnaroundTime  + ", remainingTime=" + remainingTime + "]";
     }
 
 
@@ -136,5 +145,9 @@ public class Process {
 
     public void calculateCurrentWaitingTime(int currentTime) {
         waitingTime = currentTime - arrivalTime;
+    }
+
+    public void descreaseRemainingTime() {
+        remainingTime--;
     }
 }

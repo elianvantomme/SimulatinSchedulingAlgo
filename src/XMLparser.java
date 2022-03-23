@@ -53,6 +53,7 @@ public class XMLparser {
                                 process.setArrivaltime(Integer.parseInt(detailElement.getTextContent()));
                             }else{
                                 process.setServiceTime(Integer.parseInt(detailElement.getTextContent()));
+                                process.setRemainingTime(Integer.parseInt(detailElement.getTextContent()));
                             }
                         }
                     }
