@@ -3,7 +3,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ShortestRemainingTime extends Scheduler{
-    public ArrayList<Process> process(ArrayList<Process> processList){
+    public void process(ArrayList<Process> processList){
         List<Process> waitingList = new ArrayList<>();
         ArrayList<Process> readyList = new ArrayList<>();
 
@@ -49,6 +49,5 @@ public class ShortestRemainingTime extends Scheduler{
         System.out.println("\t mean TAT: " + calculateMeanTAT(readyList));
         System.out.println("\t mean normalised TAT: " + calculateMeanNormalisedTAT(readyList));
         System.out.println("\t mean waiting time: " + calculateMeanWaitingTime(readyList));
-        return readyList;
     }
 }

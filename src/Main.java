@@ -56,20 +56,20 @@ public class Main {
 
     public static void main(String[] args) {
 
-//        processList = parser.readProcesses();
-//        FirstComeFirstServe fcfs = new FirstComeFirstServe();
-//        fcfs.process(processList);
-//        graphNormalisedTAT("FCFS");
-//        graphWaitTime("FCFS");
-//        processList.clear();
-//
+        processList = parser.readProcesses();
+        FirstComeFirstServe fcfs = new FirstComeFirstServe();
+        fcfs.process(processList);
+        graphNormalisedTAT("FCFS");
+        graphWaitTime("FCFS");
+        processList.clear();
 
-//        processList = parser.readProcesses();
-//        ShortestRemainingTime srt = new ShortestRemainingTime();
-//        processList = srt.process(processList);
-//        graphNormalisedTAT("SRT");
-//        graphWaitTime("SRT");
-//        processList.clear();
+
+        processList = parser.readProcesses();
+        ShortestRemainingTime srt = new ShortestRemainingTime();
+        srt.process(processList);
+        graphNormalisedTAT("SRT");
+        graphWaitTime("SRT");
+        processList.clear();
 
         processList = parser.readProcesses();
         ShortestJobFirst spn = new ShortestJobFirst();
