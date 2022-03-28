@@ -20,7 +20,7 @@ public class MultilevelFeedback extends Scheduler {
         int processCounter = 1;
         int currentQueue = 0;
         int finishedProcesses = 0;
-        int timeSlot = 16;
+        int timeSlot = 4;
 
         while (finishedProcesses != processList.size()) {
 
@@ -81,7 +81,7 @@ public class MultilevelFeedback extends Scheduler {
         //calculate waiting times
         calculateWaitingTime(processList);
 
-        System.out.println("\n multilevel feedback");
+        System.out.println("\n multilevel feedback q="+timeSlot);
         System.out.println("\t mean TAT: " + calculateMeanTAT(processList));
         System.out.println("\t mean normalised TAT: " + calculateMeanNormalisedTAT(processList));
         System.out.println("\t mean waiting time: " + calculateMeanWaitingTime(processList));

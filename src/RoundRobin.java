@@ -4,11 +4,17 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class RoundRobin extends Scheduler{
-    public void process(ArrayList<Process> processList){
 
+    private int timeSlice;
+
+    public RoundRobin(int timeSlice){
+        super();
+        this.timeSlice = timeSlice;
+    }
+
+    public void process(ArrayList<Process> processList){
         Queue<Process> waitingList = new LinkedList<>();
         int time=0;
-        int timeSlot = 1;
         Process current;
         int i=1;
         int remainingExecutionTime = 0;
@@ -23,14 +29,14 @@ public class RoundRobin extends Scheduler{
                 if(current.getStartTime()==0) current.setStartTime(time);
 
                 remainingExecutionTime = current.getServiceTime() - current.getExecutionTime();
-                if(remainingExecutionTime < timeSlot) {
+                if(remainingExecutionTime < timeSlice) {
                     time += remainingExecutionTime;
                     current.setExecutionTime(current.getServiceTime());
                     remainingExecutionTime = 0;
                 }
                 else {
-                    time += timeSlot;
-                    current.setExecutionTime(current.getExecutionTime() + timeSlot);
+                    time += timeSlice;
+                    current.setExecutionTime(current.getExecutionTime() + timeSlice);
                     remainingExecutionTime = current.getServiceTime() - current.getExecutionTime();
                 }
             }
@@ -65,7 +71,7 @@ public class RoundRobin extends Scheduler{
         //calculate waiting times
         calculateWaitingTime(processList);
 
-        System.out.println("\n Round Robin");
+        System.out.println("\n Round Robin q="+timeSlice);
         System.out.println("\t mean TAT: " + calculateMeanTAT(processList));
         System.out.println("\t mean normalised TAT: " + calculateMeanNormalisedTAT(processList));
         System.out.println("\t mean waiting time: " + calculateMeanWaitingTime(processList));

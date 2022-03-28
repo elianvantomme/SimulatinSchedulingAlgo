@@ -2,6 +2,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -12,19 +13,19 @@ public class Main {
     static void graphNormalisedTAT(String name){
         processList.sort((p1, p2) -> p1.getServiceTime() - p2.getServiceTime());
         XYSeries series = new XYSeries(name);
-        double totalJIFFY=0;
+        double total=0;
         int teller=0;
         for(int j=0; j<100; j++){
-            while (teller < 50000){
-                totalJIFFY += processList.get(teller).getNormalisedTurnaroundTime();
+            while (teller < numberOfProcesses){
+                total += processList.get(teller).getNormalisedTurnaroundTime();
                 teller++;
-                if(teller % 500 == 0){
+                if(teller % (numberOfProcesses / 100) == 0){
                     break;
                 }
             }
-            double gemiddeldeAantalJIFFY = totalJIFFY / 500;
-            series.add(j,gemiddeldeAantalJIFFY * Math.pow(10, -2)); // 1 jiffy = 10ms
-            totalJIFFY=0;
+            double mean = total / (numberOfProcesses / 100);
+            series.add(j,mean);
+            total=0;
         }
         datasetNormalisedTAT.addSeries(series);
     }
@@ -35,26 +36,43 @@ public class Main {
         double totalJIFFY=0;
         int teller=0;
         for(int j=0; j<100; j++){
-            while (teller < 50000){
+            while (teller < numberOfProcesses){
                 totalJIFFY += processList.get(teller).getWaitingTime();
                 teller++;
-                if(teller % 500 == 0){
+                if(teller % (numberOfProcesses / 100) == 0){
                     break;
                 }
             }
-            double gemiddeldeAantalJIFFY = totalJIFFY / 500;
+            double gemiddeldeAantalJIFFY = totalJIFFY / (numberOfProcesses / 100);
             series.add(j,gemiddeldeAantalJIFFY * Math.pow(10, -2)); // 1 jiffy = 10ms
             totalJIFFY=0;
         }
         datasetWaitTime.addSeries(series);
     }
 
-    static XMLparser parser = new XMLparser("processen50000.xml");
+
     static ArrayList<Process> processList;
     static XYSeriesCollection datasetNormalisedTAT = new XYSeriesCollection();
     static XYSeriesCollection datasetWaitTime = new XYSeriesCollection();
-
+    static int numberOfProcesses = 10000;
     public static void main(String[] args) {
+
+        String file = "processen" + numberOfProcesses + ".xml";
+        XMLparser parser = new XMLparser(file);
+
+//        processList = parser.readProcesses();
+//        double total=0.0;
+//        for(Process p : processList){
+//            System.out.println(p.getServiceTime());
+//            total+=p.getServiceTime();
+//        }
+//        System.out.println("mean service time: "+ total / numberOfProcesses);
+
+        // mediaan
+        processList = parser.readProcesses();
+        processList.sort((p1, p2) -> p1.getServiceTime() - p2.getServiceTime());
+        System.out.println("mediaan: " + processList.get(processList.size() / 2).getServiceTime());
+
 
         processList = parser.readProcesses();
         FirstComeFirstServe fcfs = new FirstComeFirstServe();
@@ -79,10 +97,24 @@ public class Main {
         processList.clear();
 
         processList = parser.readProcesses();
-        RoundRobin rr = new RoundRobin();
-        rr.process(processList);
-        graphNormalisedTAT("RR");
-        graphWaitTime("RR");
+        RoundRobin rr2 = new RoundRobin(2);
+        rr2.process(processList);
+        graphNormalisedTAT("RR2");
+        graphWaitTime("RR2");
+        processList.clear();
+
+        processList = parser.readProcesses();
+        RoundRobin rr4 = new RoundRobin(4);
+        rr4.process(processList);
+        graphNormalisedTAT("RR4");
+        graphWaitTime("RR4");
+        processList.clear();
+
+        processList = parser.readProcesses();
+        RoundRobin rr8 = new RoundRobin(8);
+        rr8.process(processList);
+        graphNormalisedTAT("RR8");
+        graphWaitTime("RR8");
         processList.clear();
 
         processList = parser.readProcesses();
@@ -110,7 +142,7 @@ public class Main {
         //normalisedTAT plot
         JFreeChart chartNormalisedTAT = ChartFactory.createXYLineChart(
                 "normalised TAT in function of service time",
-                "service time",
+                "Percentile of time required",
                 "normalised TAT",
                 datasetNormalisedTAT,
                 PlotOrientation.VERTICAL,
@@ -118,21 +150,30 @@ public class Main {
                 true,
                 false
         );
+
+        XYPlot xyPlot = chartNormalisedTAT.getXYPlot();
+        xyPlot.getRangeAxis().setRange(0.0, 100);
+
         ChartFrame frameNormalisedTAT = new ChartFrame("Test", chartNormalisedTAT);
         frameNormalisedTAT.pack();
         frameNormalisedTAT.setVisible(true);
 
+
         //wait time plot
         JFreeChart chartWaitTime = ChartFactory.createXYLineChart(
                 "wait time in function of service time",
-                "service time",
-                "wait time",
+                "Percentile of time required",
+                "wait time (s)",
                 datasetWaitTime,
                 PlotOrientation.VERTICAL,
                 true,
                 true,
                 false
         );
+
+        xyPlot = chartWaitTime.getXYPlot();
+        xyPlot.getRangeAxis().setRange(0.0, 15);
+
         ChartFrame frameWaitTime = new ChartFrame("Test", chartWaitTime);
         frameWaitTime.pack();
         frameWaitTime.setVisible(true);

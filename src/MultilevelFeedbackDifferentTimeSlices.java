@@ -93,7 +93,7 @@ public class MultilevelFeedbackDifferentTimeSlices extends Scheduler {
         //calculate waiting times
         calculateWaitingTime(processList);
 
-        System.out.println("\n multilevel feedback");
+        System.out.println("\n multilevel feedback q=2^i");
         System.out.println("\t mean TAT: " + calculateMeanTAT(processList));
         System.out.println("\t mean normalised TAT: " + calculateMeanNormalisedTAT(processList));
         System.out.println("\t mean waiting time: " + calculateMeanWaitingTime(processList));
