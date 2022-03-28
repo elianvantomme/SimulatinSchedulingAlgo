@@ -94,10 +94,17 @@ public class Main {
 
 
         processList = parser.readProcesses();
-        MultilevelFeedback fb = new MultilevelFeedback();
-        fb.process(processList);
-        graphNormalisedTAT("FB");
-        graphWaitTime("FB");
+        MultilevelFeedback fbV1 = new MultilevelFeedback();
+        fbV1.process(processList);
+        graphNormalisedTAT("FBV1");
+        graphWaitTime("FBV1");
+        processList.clear();
+
+        processList = parser.readProcesses();
+        MultilevelFeedbackDifferentTimeSlices fbV2 = new MultilevelFeedbackDifferentTimeSlices();
+        fbV2.process(processList);
+        graphNormalisedTAT("FBV2");
+        graphWaitTime("FBV2");
         processList.clear();
 
         //normalisedTAT plot

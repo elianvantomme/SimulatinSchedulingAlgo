@@ -2,33 +2,45 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
+class CustomQue {
+    int i;
+    int timeSlot;
+    Queue<Process> queue;
 
-public class MultilevelFeedback extends Scheduler {
+    public CustomQue(int i){
+        this.i = i;
+        timeSlot = (int) Math.pow(2,i);
+        queue = new LinkedList<>();
+    }
+}
+
+
+public class MultilevelFeedbackDifferentTimeSlices extends Scheduler {
     public void process(ArrayList<Process> processList) {
 
-        ArrayList<Queue<Process>> queueList = new ArrayList<>();
+        ArrayList<CustomQue> queueList = new ArrayList<>();
         for (int j = 0; j < 5; j++) {
-            queueList.add(new LinkedList<>());
+            queueList.add(new CustomQue(j));
         }
 
         // add first process
         Process currentProcess = processList.get(0);
-        queueList.get(0).add(currentProcess);
+        queueList.get(0).queue.add(currentProcess);
         int time = currentProcess.getArrivaltime();
         currentProcess.setStartTime(currentProcess.getArrivaltime());
 
         int processCounter = 1;
-        int currentQueue = 0;
         int finishedProcesses = 0;
-        int timeSlot = 16;
+
 
         while (finishedProcesses != processList.size()) {
 
+            CustomQue currentQueue = null;
             int remaningExecutionTime = 0;
             for(int k=0; k<queueList.size(); k++) {
-                currentProcess = queueList.get(k).poll();
+                currentProcess = queueList.get(k).queue.poll();
                 if(currentProcess != null){
-                    currentQueue = k;
+                    currentQueue = queueList.get(k);
                     break;
                 }
                 else if(k==queueList.size()-1){
@@ -39,17 +51,17 @@ public class MultilevelFeedback extends Scheduler {
 
             if(currentProcess != null){
                 remaningExecutionTime = currentProcess.getServiceTime() - currentProcess.getExecutionTime();
-                if(currentQueue==0){
+                if(currentQueue.i==0){
                     currentProcess.setStartTime(time); // when in RQ0 the process hasn't started yet
                 }
-                if(remaningExecutionTime < timeSlot){
+                if(remaningExecutionTime < currentQueue.timeSlot){
                     time += remaningExecutionTime;
                     currentProcess.setExecutionTime(currentProcess.getServiceTime());
                     remaningExecutionTime = 0;
                 }
                 else {
-                    time += timeSlot;
-                    currentProcess.setExecutionTime(currentProcess.getExecutionTime() + timeSlot);
+                    time += currentQueue.timeSlot;
+                    currentProcess.setExecutionTime(currentProcess.getExecutionTime() + currentQueue.timeSlot);
                     remaningExecutionTime = currentProcess.getServiceTime() - currentProcess.getExecutionTime();
                 }
             }
@@ -59,7 +71,7 @@ public class MultilevelFeedback extends Scheduler {
             //which processes have arrived in the meantime --> add to queue
             while (processCounter<processList.size()) {
                 if(time >= processList.get(processCounter).getArrivalTime()) {
-                    queueList.get(0).add(processList.get(processCounter));
+                    queueList.get(0).queue.add(processList.get(processCounter));
                     processCounter++;
                 }
                 else break;
@@ -68,8 +80,8 @@ public class MultilevelFeedback extends Scheduler {
             // now add the current process to the next queue if it hasn't finished
             if(currentProcess != null){
                 if(remaningExecutionTime > 0){
-                    if(currentQueue == queueList.size()-1) queueList.get(currentQueue).add(currentProcess);
-                    else queueList.get(currentQueue+1).add(currentProcess);
+                    if(currentQueue.i == queueList.size()-1) queueList.get(currentQueue.i).queue.add(currentProcess);
+                    else queueList.get(currentQueue.i+1).queue.add(currentProcess);
                 }
                 else{
                     currentProcess.setEndTime(time);
