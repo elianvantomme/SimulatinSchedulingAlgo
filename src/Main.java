@@ -54,7 +54,7 @@ public class Main {
     static ArrayList<Process> processList;
     static XYSeriesCollection datasetNormalisedTAT = new XYSeriesCollection();
     static XYSeriesCollection datasetWaitTime = new XYSeriesCollection();
-    static int numberOfProcesses = 10000;
+    static int numberOfProcesses = 20000;
     public static void main(String[] args) {
 
         String file = "processen" + numberOfProcesses + ".xml";
@@ -68,10 +68,10 @@ public class Main {
 //        }
 //        System.out.println("mean service time: "+ total / numberOfProcesses);
 
-        // mediaan
-        processList = parser.readProcesses();
-        processList.sort((p1, p2) -> p1.getServiceTime() - p2.getServiceTime());
-        System.out.println("mediaan: " + processList.get(processList.size() / 2).getServiceTime());
+//        // mediaan
+//        processList = parser.readProcesses();
+//        processList.sort((p1, p2) -> p1.getServiceTime() - p2.getServiceTime());
+//        System.out.println("mediaan: " + processList.get(processList.size() / 2).getServiceTime());
 
 
         processList = parser.readProcesses();
@@ -99,23 +99,23 @@ public class Main {
         processList = parser.readProcesses();
         RoundRobin rr2 = new RoundRobin(2);
         rr2.process(processList);
-        graphNormalisedTAT("RR2");
-        graphWaitTime("RR2");
+        graphNormalisedTAT("RR(q=2)");
+        graphWaitTime("RR2(q=2)");
         processList.clear();
 
-        processList = parser.readProcesses();
-        RoundRobin rr4 = new RoundRobin(4);
-        rr4.process(processList);
-        graphNormalisedTAT("RR4");
-        graphWaitTime("RR4");
-        processList.clear();
-
-        processList = parser.readProcesses();
-        RoundRobin rr8 = new RoundRobin(8);
-        rr8.process(processList);
-        graphNormalisedTAT("RR8");
-        graphWaitTime("RR8");
-        processList.clear();
+//        processList = parser.readProcesses();
+//        RoundRobin rr4 = new RoundRobin(4);
+//        rr4.process(processList);
+//        graphNormalisedTAT("RR4");
+//        graphWaitTime("RR4");
+//        processList.clear();
+//
+//        processList = parser.readProcesses();
+//        RoundRobin rr8 = new RoundRobin(8);
+//        rr8.process(processList);
+//        graphNormalisedTAT("RR8");
+//        graphWaitTime("RR8");
+//        processList.clear();
 
         processList = parser.readProcesses();
         HighestResponseRatioNext hrrn = new HighestResponseRatioNext();
@@ -126,17 +126,17 @@ public class Main {
 
 
         processList = parser.readProcesses();
-        MultilevelFeedback fbV1 = new MultilevelFeedback();
+        MultilevelFeedback fbV1 = new MultilevelFeedback(2);
         fbV1.process(processList);
-        graphNormalisedTAT("FBV1");
-        graphWaitTime("FBV1");
+        graphNormalisedTAT("FB(q=2)");
+        graphWaitTime("FB(q=2)");
         processList.clear();
 
         processList = parser.readProcesses();
         MultilevelFeedbackDifferentTimeSlices fbV2 = new MultilevelFeedbackDifferentTimeSlices();
         fbV2.process(processList);
-        graphNormalisedTAT("FBV2");
-        graphWaitTime("FBV2");
+        graphNormalisedTAT("FB(q=2^i)");
+        graphWaitTime("FB(q=2^i)");
         processList.clear();
 
         //normalisedTAT plot
@@ -152,7 +152,7 @@ public class Main {
         );
 
         XYPlot xyPlot = chartNormalisedTAT.getXYPlot();
-        xyPlot.getRangeAxis().setRange(0.0, 100);
+        xyPlot.getRangeAxis().setRange(0.0, 20);
 
         ChartFrame frameNormalisedTAT = new ChartFrame("Test", chartNormalisedTAT);
         frameNormalisedTAT.pack();

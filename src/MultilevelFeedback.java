@@ -4,6 +4,13 @@ import java.util.Queue;
 
 
 public class MultilevelFeedback extends Scheduler {
+
+    private int timeSlot;
+
+    public MultilevelFeedback(int timeSlot){
+        this.timeSlot = timeSlot;
+    }
+
     public void process(ArrayList<Process> processList) {
 
         ArrayList<Queue<Process>> queueList = new ArrayList<>();
@@ -20,7 +27,6 @@ public class MultilevelFeedback extends Scheduler {
         int processCounter = 1;
         int currentQueue = 0;
         int finishedProcesses = 0;
-        int timeSlot = 4;
 
         while (finishedProcesses != processList.size()) {
 
